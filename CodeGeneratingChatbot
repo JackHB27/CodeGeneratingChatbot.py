@@ -1,1 +1,99 @@
+import pyttsx3 
+import googlesearch 
+class CodeGeneratingChatbot:
+    def __init__(self):
+        self.name = "Code-Generating Chatbot"
+        self.chat_history = []
 
+    def greet(self):
+        return f"Hello! I'm {self.name}. How can I assist you?"
+
+    def respond(self, user_input):
+        self.chat_history.append({"user": user_input})
+        response = self.generate_response(user_input)
+        self.chat_history[-1]["response"] = response
+        return response
+
+    def generate_response(self, user_input):
+        if any(greeting in user_input for greeting in ["hi", "hello", "hey"]):
+            return "Hi there! How can I help?"
+        elif "how are you" in user_input:
+            return "I'm just a computer program, but I'm here to help!"
+        elif "what can you do" in user_input:
+            return "I can answer questions, provide information, generate code snippets, and perform web searches."
+        elif "bye" in user_input:
+            return "Goodbye! Have a great day."
+        elif "search" in user_input:
+            query = user_input.replace("search", "").strip()
+            results = list(search(query, num=5, stop=5))
+       for results:
+                response = f"Here are some search results for '{query}':\n"
+                for index, result in enumerate(results, start=1):
+                    response += f"{index}. {result}\n"
+                return response
+            else:
+                return "No search results found."
+        elif "code class" in user_input:
+            return self.generate_class_code()
+        elif "code function" in user_input:
+            return self.generate_function_code()
+        elif "code loop" in user_input:
+            return self.generate_loop_code()
+        elif "code dictionary" in user_input:
+            return self.generate_dictionary_code()
+        elif "code exit" in user_input:
+            self.save_chat_history("chat_history.txt")
+            return "Goodbye! Chat history saved. Have a great day."
+        else:
+            return "I'm not sure how to respond to that."
+
+    def generate_class_code(self):
+        # Generate code for a class in Python
+        return """class MyClass:
+    def __init__(self):
+        self.my_attribute = 0
+
+    def my_method(self):
+        return "Hello from MyClass!"
+"""
+
+    def generate_function_code(self):
+        # Generate code for a function in Python
+        return """def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("Alice"))
+"""
+
+    def generate_loop_code(self):
+        # Generate code for a loop in Python
+        return """for i in range(5):
+    print(i)
+"""
+
+    def generate_dictionary_code(self):
+        # Generate code for a dictionary in Python
+        return """my_dict = {
+    'key1': 'value1',
+    'key2': 'value2',
+    'key3': 'value3'
+}
+"""
+
+    def save_chat_history(self, filename):
+        with open(filename, "w") as file:
+            for entry in self.chat_history:
+                user_msg = entry["user"]
+                bot_response = entry["response"]
+                file.write(f"You: {user_msg}\n")
+                file.write(f"Chatbot: {bot_response}\n")
+                file.write("\n")
+
+# Example usage
+bot = CodeGeneratingChatbot()
+print(bot.greet())
+
+while True:
+    user_input = input("You: ")
+    response = bot.respond(user_input)
+    print("Chatbot:", response)
